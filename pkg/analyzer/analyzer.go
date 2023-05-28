@@ -8,6 +8,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 )
 
+const lenFunctionName = "len"
+
 var Analyzer = &analysis.Analyzer{
 	Name: "arlen",
 	Doc:  "checks if accessed array len was checked before accessing",
@@ -106,14 +108,12 @@ func (a *ArlenAnalyzer) registerCheckedVariables(stmt *ast.IfStmt) {
 }
 
 func (a *ArlenAnalyzer) getLenExpression(binaryExpr *ast.BinaryExpr) (expr *ast.CallExpr) {
-	x := binaryExpr.X
-
 	getCallExpr := func(expr ast.Expr) *ast.CallExpr {
-		callExpr, ok := x.(*ast.CallExpr)
+		callExpr, ok := expr.(*ast.CallExpr)
 		if !ok {
 			return nil
 		}
-		if fnIdent, ok := callExpr.Fun.(*ast.Ident); ok && fnIdent.Name != "len" {
+		if fnIdent, ok := callExpr.Fun.(*ast.Ident); ok && fnIdent.Name != lenFunctionName {
 			return nil
 		}
 		return callExpr
