@@ -77,22 +77,31 @@ func NewSlenAnalyzer(pass *analysis.Pass, info *types.Info) *SlenAnalyzer {
 }
 
 func (a *SlenAnalyzer) Inspect(node ast.Node) (procceed bool) {
-	procceed = true
-
 	switch stmt := node.(type) {
+	// verify
 	case *ast.IndexExpr:
-		a.verifyArrayCheck(stmt)
+		a.verifyIndexExpr(stmt)
+	case *ast.SliceExpr:
+		a.verifySliceExpr(stmt)
+
+	// register
 	case *ast.IfStmt:
-		a.registerIfCheck(stmt)
+		a.registerIfStmt(stmt)
 	case *ast.RangeStmt:
-		a.registerRangeCheck(stmt)
+		a.registerRangeStmt(stmt)
 	case *ast.ForStmt:
-		a.registerForCheck(stmt)
+		a.registerForStmt(stmt)
 	}
-	return
+	return true
 }
 
-func (a *SlenAnalyzer) verifyArrayCheck(expr *ast.IndexExpr) {
+func (a *SlenAnalyzer) verifySliceExpr(stmt *ast.SliceExpr) {
+	if ident, ok := stmt.X.(*ast.Ident); ok && !a.sliceLengthChecked(ident) {
+		a.report(ident.Pos(), "check slice %s length before accessing", ident.Name)
+	}
+}
+
+func (a *SlenAnalyzer) verifyIndexExpr(expr *ast.IndexExpr) {
 	ident, ok := expr.X.(*ast.Ident)
 	if !ok {
 		return
@@ -108,36 +117,38 @@ func (a *SlenAnalyzer) verifyArrayCheck(expr *ast.IndexExpr) {
 		return
 	}
 
-	if _, ok := a.varLenChecked[identID(ident)]; ok {
+	if a.sliceLengthChecked(ident) {
 		return
 	}
+
 	a.report(ident.Pos(), "check slice %s length before accessing", name)
-}
-
-func (a *SlenAnalyzer) registerForCheck(stmt *ast.ForStmt) {
-	binaryExpr, ok := stmt.Cond.(*ast.BinaryExpr)
-	if !ok {
-		return
-	}
-	a.registerCondCheck(binaryExpr)
-}
-
-func (a *SlenAnalyzer) registerRangeCheck(stmt *ast.RangeStmt) {
-	if ident, ok := stmt.X.(*ast.Ident); ok {
-		a.registerCheck(ident)
-	}
 }
 
 func (a *SlenAnalyzer) registerCheck(ident *ast.Ident) {
 	a.varLenChecked[identID(ident)] = struct{}{}
 }
 
-func (a *SlenAnalyzer) registerIfCheck(stmt *ast.IfStmt) {
-	binaryExpr, ok := stmt.Cond.(*ast.BinaryExpr)
-	if !ok {
-		return
+func (a *SlenAnalyzer) sliceLengthChecked(ident *ast.Ident) (checked bool) {
+	_, checked = a.varLenChecked[identID(ident)]
+	return
+}
+
+func (a *SlenAnalyzer) registerForStmt(stmt *ast.ForStmt) {
+	if binaryExpr, ok := stmt.Cond.(*ast.BinaryExpr); ok {
+		a.registerCondCheck(binaryExpr)
 	}
-	a.registerCondCheck(binaryExpr)
+}
+
+func (a *SlenAnalyzer) registerRangeStmt(stmt *ast.RangeStmt) {
+	if ident, ok := stmt.X.(*ast.Ident); ok {
+		a.registerCheck(ident)
+	}
+}
+
+func (a *SlenAnalyzer) registerIfStmt(stmt *ast.IfStmt) {
+	if binaryExpr, ok := stmt.Cond.(*ast.BinaryExpr); ok {
+		a.registerCondCheck(binaryExpr)
+	}
 }
 
 func (a *SlenAnalyzer) registerCondCheck(binaryExpr *ast.BinaryExpr) {

@@ -33,12 +33,6 @@ func main() {
 	}
 	_ = a3[0]
 
-	a4 := []int{1}
-	if check(a) {
-		fmt.Println("bad")
-	}
-	_ = a4[0] // want `slen: check slice a4 length before accessing`
-
 	abc := []int{1, 2, 3, 4}
 	for i := range abc {
 		_ = abc[i]
@@ -48,6 +42,21 @@ func main() {
 	for i := 0; i < len(xyz); i++ {
 		_ = xyz[i]
 	}
+
+	s1 := []int{1, 2, 3}
+	_ = s1[0:1] // want `slen: check slice s1 length before accessing`
+
+	s2 := []int{1, 2, 3}
+	if len(s2) == 0 {
+		fmt.Println("bad")
+	}
+	_ = s2[0:]
+
+	do2(s2)
+}
+
+func do2(a []int) {
+	_ = a[0] // want `slen: check slice a length before accessing`
 }
 
 func check(a []int) bool {
