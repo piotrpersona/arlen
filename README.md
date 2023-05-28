@@ -1,6 +1,6 @@
 # slen
 
-Linter which reports if slice element was accessed without checking if slice length.
+Linter which reports if slice element was accessed without checking slice length.
 
 ## Examples
 
