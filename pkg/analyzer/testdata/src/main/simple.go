@@ -38,6 +38,11 @@ func main() {
 		fmt.Println("bad")
 	}
 	_ = a4[0] // want `slen: check slice a4 length before accessing`
+
+	abc := []int{1, 2, 3, 4}
+	for i := range abc {
+		_ = abc[i]
+	}
 }
 
 func check(a []int) bool {

@@ -83,7 +83,9 @@ func (a *SlenAnalyzer) Inspect(node ast.Node) (procceed bool) {
 	case *ast.IndexExpr:
 		a.verifyArrayCheck(stmt)
 	case *ast.IfStmt:
-		a.registerArrayCheck(stmt)
+		a.registerIfCheck(stmt)
+	case *ast.RangeStmt:
+		a.registerRangeCheck(stmt)
 	}
 	return
 }
@@ -114,7 +116,17 @@ func (a *SlenAnalyzer) report(pos token.Pos, format string, args ...any) {
 	a.pass.Reportf(pos, "%s: %s", SlenCmd, fmt.Sprintf(format, args...))
 }
 
-func (a *SlenAnalyzer) registerArrayCheck(stmt *ast.IfStmt) {
+func (a *SlenAnalyzer) registerRangeCheck(stmt *ast.RangeStmt) {
+	if ident, ok := stmt.X.(*ast.Ident); ok {
+		a.registerCheck(ident)
+	}
+}
+
+func (a *SlenAnalyzer) registerCheck(ident *ast.Ident) {
+	a.varLenChecked[identID(ident)] = struct{}{}
+}
+
+func (a *SlenAnalyzer) registerIfCheck(stmt *ast.IfStmt) {
 	binaryExpr, ok := stmt.Cond.(*ast.BinaryExpr)
 	if !ok {
 		return
@@ -125,7 +137,7 @@ func (a *SlenAnalyzer) registerArrayCheck(stmt *ast.IfStmt) {
 	}
 	for _, arg := range lenExpr.Args {
 		if ident, ok := arg.(*ast.Ident); ok {
-			a.varLenChecked[identID(ident)] = struct{}{}
+			a.registerCheck(ident)
 		}
 	}
 }
