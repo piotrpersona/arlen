@@ -51,3 +51,4 @@ func check(a []int) bool {
 	return len(a) == 0
 }
 ```
+
