@@ -1,5 +1,5 @@
 {
-  "name": "slen"
+  "name": "slen",
   "version": "v0.1.0",
   "description": "linter checking if slice len was checked before array is accessed", 
   "keywords": [
