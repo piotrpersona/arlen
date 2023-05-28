@@ -43,6 +43,11 @@ func main() {
 	for i := range abc {
 		_ = abc[i]
 	}
+
+	xyz := []int{1, 2, 3}
+	for i := 0; i < len(xyz); i++ {
+		_ = xyz[i]
+	}
 }
 
 func check(a []int) bool {

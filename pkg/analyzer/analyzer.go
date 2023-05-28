@@ -86,6 +86,8 @@ func (a *SlenAnalyzer) Inspect(node ast.Node) (procceed bool) {
 		a.registerIfCheck(stmt)
 	case *ast.RangeStmt:
 		a.registerRangeCheck(stmt)
+	case *ast.ForStmt:
+		a.registerForCheck(stmt)
 	}
 	return
 }
@@ -112,8 +114,12 @@ func (a *SlenAnalyzer) verifyArrayCheck(expr *ast.IndexExpr) {
 	a.report(ident.Pos(), "check slice %s length before accessing", name)
 }
 
-func (a *SlenAnalyzer) report(pos token.Pos, format string, args ...any) {
-	a.pass.Reportf(pos, "%s: %s", SlenCmd, fmt.Sprintf(format, args...))
+func (a *SlenAnalyzer) registerForCheck(stmt *ast.ForStmt) {
+	binaryExpr, ok := stmt.Cond.(*ast.BinaryExpr)
+	if !ok {
+		return
+	}
+	a.registerCondCheck(binaryExpr)
 }
 
 func (a *SlenAnalyzer) registerRangeCheck(stmt *ast.RangeStmt) {
@@ -131,6 +137,10 @@ func (a *SlenAnalyzer) registerIfCheck(stmt *ast.IfStmt) {
 	if !ok {
 		return
 	}
+	a.registerCondCheck(binaryExpr)
+}
+
+func (a *SlenAnalyzer) registerCondCheck(binaryExpr *ast.BinaryExpr) {
 	lenExpr := a.getLenCallExpr(binaryExpr)
 	if lenExpr == nil {
 		return
@@ -158,6 +168,10 @@ func (a *SlenAnalyzer) getLenExpr(expr ast.Expr) *ast.CallExpr {
 		return nil
 	}
 	return callExpr
+}
+
+func (a *SlenAnalyzer) report(pos token.Pos, format string, args ...any) {
+	a.pass.Reportf(pos, "%s: %s", SlenCmd, fmt.Sprintf(format, args...))
 }
 
 func identID(ident *ast.Ident) string {
