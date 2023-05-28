@@ -49,6 +49,8 @@ func main() {
 
 ### Positives
 
+The following statements will not report error.
+
 ```go
 _ = len(a) == 0
 _ = 0 == len(a) // Yoda
