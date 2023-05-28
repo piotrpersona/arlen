@@ -1,3 +1,12 @@
+# [0.5.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.4.0...v0.5.0) (2023-05-28)
+
+
+### Features
+
+* Add examples to README.md ([e6cfa97](https://github.com/beemojs/conventional-changelog-beemo/commit/e6cfa97dc15f32ef048692b15cb2f0447f7c8803))
+
+
+
 # [0.4.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.3.0...v0.4.0) (2023-05-28)
 
 
