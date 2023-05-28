@@ -1,5 +1,7 @@
 # slen
 
+![gopher](./img/gopher.go)
+
 Linter which reports if slice element was accessed without checking it's length.
 
 ## Examples
