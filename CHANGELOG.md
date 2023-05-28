@@ -1,3 +1,12 @@
+# [0.6.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.5.0...v0.6.0) (2023-05-28)
+
+
+### Features
+
+* Add positives note ([725bd5a](https://github.com/beemojs/conventional-changelog-beemo/commit/725bd5a4e1bdf73a31cfa71a641184104f0cb485))
+
+
+
 # [0.5.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.4.0...v0.5.0) (2023-05-28)
 
 
@@ -44,17 +53,6 @@
 * Add package.json ([69f4d5e](https://github.com/beemojs/conventional-changelog-beemo/commit/69f4d5e06c578bb153fa124484a9a9865bbf46eb))
 * add test data ([bf0c45c](https://github.com/beemojs/conventional-changelog-beemo/commit/bf0c45c974bd34f22286646d8bf218e6b1e089ee))
 * Pipe ([d223504](https://github.com/beemojs/conventional-changelog-beemo/commit/d2235049ea3a53296f369b0689812b20865e7072))
-
-
-
-# [0.1.0](https://github.com/beemojs/conventional-changelog-beemo/compare/5c24f97e6da8478e5d2a35883cf8dfaafed9ba0f...v0.1.0) (2023-05-28)
-
-
-### Features
-
-* Extend example ([fa43ffe](https://github.com/beemojs/conventional-changelog-beemo/commit/fa43ffee80d42331cf82d468583c7ae05d5f0b0b))
-* Fix ident key ([c73a585](https://github.com/beemojs/conventional-changelog-beemo/commit/c73a585a52609b18bd841dd984416929a839477a))
-* MVP ([5c24f97](https://github.com/beemojs/conventional-changelog-beemo/commit/5c24f97e6da8478e5d2a35883cf8dfaafed9ba0f))
 
 
 
