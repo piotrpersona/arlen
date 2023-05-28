@@ -1,0 +1,14 @@
+{
+  "name": "slen"
+  "version": "v0.1.0",
+  "description": "linter checking if slice len was checked before array is accessed", 
+  "keywords": [
+    "slen",
+    "golanci-lint",
+    "linter",
+    "golang"
+  ],
+  "repository": "https://github.com/beemojs/conventional-changelog-beemo",
+  "author": "Miles Johnson",
+  "license": "MIT",
+}
