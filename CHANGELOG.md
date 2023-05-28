@@ -1,3 +1,12 @@
+# [0.4.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.3.0...v0.4.0) (2023-05-28)
+
+
+### Features
+
+* Refactor tests ([556f306](https://github.com/beemojs/conventional-changelog-beemo/commit/556f306be381dfff525110a06bc83a7e1c149692))
+
+
+
 # [0.3.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.2.0...v0.3.0) (2023-05-28)
 
 
