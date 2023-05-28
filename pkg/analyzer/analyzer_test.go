@@ -8,6 +8,8 @@ import (
 )
 
 func TestAnalyzer(t *testing.T) {
+	t.Parallel()
+
 	pkgs := []string{
 		"main",
 	}
