@@ -65,5 +65,5 @@ for i := 0; i < len(a); i++ {
 
 ## TODO
 
-* [] Check in different function
+* [ ] Check in different function
 
