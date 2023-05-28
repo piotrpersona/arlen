@@ -1,3 +1,15 @@
+# [0.3.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.2.0...v0.3.0) (2023-05-28)
+
+
+### Features
+
+* Add makefile ([f938787](https://github.com/beemojs/conventional-changelog-beemo/commit/f938787e0d14396d18be4492fb9345222d5fe309))
+* Add more test cases ([1cdff59](https://github.com/beemojs/conventional-changelog-beemo/commit/1cdff59293160fbee835843998cf1b016e249ce8))
+* Handle range stmt ([5358ff9](https://github.com/beemojs/conventional-changelog-beemo/commit/5358ff92546f852b65b0d78bf255675e1b4525f2))
+* Handle range stmt ([bdbd815](https://github.com/beemojs/conventional-changelog-beemo/commit/bdbd8151a5cbb12fcfe6535de02a1fd44390d390))
+
+
+
 # [0.2.0](https://github.com/beemojs/conventional-changelog-beemo/compare/v0.1.0...v0.2.0) (2023-05-28)
 
 
