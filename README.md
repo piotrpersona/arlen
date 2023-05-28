@@ -2,7 +2,7 @@
 
 Linter which reports if slice element was accessed without checking if slice length.
 
-## Examples
+## Example
 
 ```go
 package main
