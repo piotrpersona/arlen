@@ -1,7 +1,7 @@
 {
   "name": "slen",
-  "version": "v0.1.0",
-  "description": "linter checking if slice len was checked before array is accessed", 
+  "version": "0.2.0",
+  "description": "linter checking if slice len was checked before array is accessed",
   "keywords": [
     "slen",
     "golanci-lint",
