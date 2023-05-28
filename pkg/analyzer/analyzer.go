@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"fmt"
 	"go/ast"
 	"go/importer"
 	"go/types"
@@ -12,7 +13,7 @@ const lenFunctionName = "len"
 
 var Analyzer = &analysis.Analyzer{
 	Name: "arlen",
-	Doc:  "checks if accessed array len was checked before accessing",
+	Doc:  "verifies if array len was checked before accessing the array",
 	Run:  run,
 }
 
@@ -85,7 +86,7 @@ func (a *ArlenAnalyzer) verifyIfVariableWasChecked(expr *ast.IndexExpr) {
 		return
 	}
 
-	if _, ok := a.varLenChecked[name]; ok {
+	if _, ok := a.varLenChecked[a.identKey(ident)]; ok {
 		return
 	}
 	a.pass.Reportf(ident.Pos(), "arlen: check variable %s before accessing", name)
@@ -102,7 +103,7 @@ func (a *ArlenAnalyzer) registerCheckedVariables(stmt *ast.IfStmt) {
 	}
 	for _, arg := range lenExpr.Args {
 		if ident, ok := arg.(*ast.Ident); ok {
-			a.varLenChecked[ident.Name] = struct{}{}
+			a.varLenChecked[a.identKey(ident)] = struct{}{}
 		}
 	}
 }
@@ -123,4 +124,8 @@ func (a *ArlenAnalyzer) getLenExpression(binaryExpr *ast.BinaryExpr) (expr *ast.
 		return expr
 	}
 	return getCallExpr(binaryExpr.Y)
+}
+
+func (a *ArlenAnalyzer) identKey(ident *ast.Ident) string {
+	return fmt.Sprintf("%s_%d", ident.Name, ident.Obj.Pos())
 }
