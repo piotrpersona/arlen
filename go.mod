@@ -1,4 +1,4 @@
-module github.com/piotrpersona/arlen
+module github.com/piotrpersona/slen
 
 go 1.19
 
