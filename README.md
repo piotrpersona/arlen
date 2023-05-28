@@ -1,8 +1,9 @@
 # slen
 
+Linter which reports if slice element was accessed without checking it's length.
+
 ![gopher](./img/gopher.png)
 
-Linter which reports if slice element was accessed without checking it's length.
 
 ## Examples
 
