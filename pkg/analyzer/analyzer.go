@@ -13,12 +13,12 @@ import (
 
 const (
 	lenFunctionName = "len"
-	arlenCmd        = "arlen"
+	slenCmd         = "slen"
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: arlenCmd,
-	Doc:  "verifies if array len was checked before accessing the array",
+	Name: slenCmd,
+	Doc:  "verifies if slice len was checked before accessing the array",
 	Run:  run,
 }
 
@@ -49,32 +49,32 @@ func run(pass *analysis.Pass) (i interface{}, err error) {
 		return
 	}
 
-	arlenAnalyzer := NewArlenAnalyzer(pass, info)
+	slenAnalyzer := NewSlenAnalyzer(pass, info)
 	for _, f := range pass.Files {
-		ast.Inspect(f, arlenAnalyzer.Inspect)
+		ast.Inspect(f, slenAnalyzer.Inspect)
 	}
 	return
 }
 
-type ArlenAnalyzer struct {
+type SlenAnalyzer struct {
 	pass          *analysis.Pass
 	objects       map[string]types.Object
 	varLenChecked map[string]struct{}
 }
 
-func NewArlenAnalyzer(pass *analysis.Pass, info *types.Info) *ArlenAnalyzer {
+func NewSlenAnalyzer(pass *analysis.Pass, info *types.Info) *SlenAnalyzer {
 	objects := make(map[string]types.Object, len(info.Defs))
 	for ident, object := range info.Defs {
 		objects[ident.Name] = object
 	}
-	return &ArlenAnalyzer{
+	return &SlenAnalyzer{
 		varLenChecked: make(map[string]struct{}, 0),
 		pass:          pass,
 		objects:       objects,
 	}
 }
 
-func (a *ArlenAnalyzer) Inspect(node ast.Node) (procceed bool) {
+func (a *SlenAnalyzer) Inspect(node ast.Node) (procceed bool) {
 	procceed = true
 
 	switch stmt := node.(type) {
@@ -86,7 +86,7 @@ func (a *ArlenAnalyzer) Inspect(node ast.Node) (procceed bool) {
 	return
 }
 
-func (a *ArlenAnalyzer) verifyArrayCheck(expr *ast.IndexExpr) {
+func (a *SlenAnalyzer) verifyArrayCheck(expr *ast.IndexExpr) {
 	ident, ok := expr.X.(*ast.Ident)
 	if !ok {
 		return
@@ -98,27 +98,21 @@ func (a *ArlenAnalyzer) verifyArrayCheck(expr *ast.IndexExpr) {
 	}
 
 	_, isSlice := object.Type().(*types.Slice)
-	_, isArray := object.Type().(*types.Array)
-
-	if !isSlice && !isArray {
+	if !isSlice {
 		return
 	}
 
 	if _, ok := a.varLenChecked[identID(ident)]; ok {
 		return
 	}
-	artype := "slice"
-	if isArray {
-		artype = "array"
-	}
-	a.report(ident.Pos(), "check %s %s length before accessing", artype, name)
+	a.report(ident.Pos(), "check slice %s length before accessing", name)
 }
 
-func (a *ArlenAnalyzer) report(pos token.Pos, format string, args ...any) {
-	a.pass.Reportf(pos, "%s: %s", arlenCmd, fmt.Sprintf(format, args...))
+func (a *SlenAnalyzer) report(pos token.Pos, format string, args ...any) {
+	a.pass.Reportf(pos, "%s: %s", slenCmd, fmt.Sprintf(format, args...))
 }
 
-func (a *ArlenAnalyzer) registerArrayCheck(stmt *ast.IfStmt) {
+func (a *SlenAnalyzer) registerArrayCheck(stmt *ast.IfStmt) {
 	binaryExpr, ok := stmt.Cond.(*ast.BinaryExpr)
 	if !ok {
 		return
@@ -134,14 +128,14 @@ func (a *ArlenAnalyzer) registerArrayCheck(stmt *ast.IfStmt) {
 	}
 }
 
-func (a *ArlenAnalyzer) getLenCallExpr(binaryExpr *ast.BinaryExpr) (expr *ast.CallExpr) {
+func (a *SlenAnalyzer) getLenCallExpr(binaryExpr *ast.BinaryExpr) (expr *ast.CallExpr) {
 	if expr := a.getLenExpr(binaryExpr.X); expr != nil {
 		return expr
 	}
 	return a.getLenExpr(binaryExpr.Y)
 }
 
-func (a *ArlenAnalyzer) getLenExpr(expr ast.Expr) *ast.CallExpr {
+func (a *SlenAnalyzer) getLenExpr(expr ast.Expr) *ast.CallExpr {
 	callExpr, ok := expr.(*ast.CallExpr)
 	if !ok {
 		return nil
@@ -154,8 +148,4 @@ func (a *ArlenAnalyzer) getLenExpr(expr ast.Expr) *ast.CallExpr {
 
 func identID(ident *ast.Ident) string {
 	return fmt.Sprintf("%s_%d", ident.Name, ident.Obj.Pos())
-}
-
-func exprID(expr ast.Expr) string {
-	return fmt.Sprintf("%d_%d", expr.Pos(), expr.End())
 }
