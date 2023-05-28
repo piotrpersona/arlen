@@ -1,0 +1,81 @@
+# Options for analysis running.
+run:
+  concurrency: 4
+  timeout: 1m 
+  skip-dirs:
+    - test/testdata
+  go: '1.19'
+linters-settings:
+linters:
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - cyclop
+    - decorder
+    - depguard
+    - dupl
+    - dupword
+    - durationcheck
+    - errcheck
+    - errname
+    - errorlint
+    - funlen
+    - gci
+    - gochecknoinits
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+    - godox
+    - gofmt
+    - gofumpt
+    - goheader
+    - goimports
+    - gomnd
+    - gomoddirectives
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - grouper
+    - ineffassign
+    - interfacebloat
+    - ireturn
+    - lll
+    - loggercheck
+    - maintidx
+    - misspell
+    - nestif
+    - noctx
+    - nolintlint
+    - nosprintfhostport
+    - paralleltest
+    - prealloc
+    - predeclared
+    - promlinter
+    - reassign
+    - revive
+    - staticcheck
+    - stylecheck
+    - tagliatelle
+    - tenv
+    - testableexamples
+    - testpackage
+    - thelper
+    - tparallel
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - whitespace
+    - wrapcheck
+issues:
+  # See the dedicated "issues" documentation section.
+  option: value
+severity:
+  # See the dedicated "severity" documentation section.
+  option: value
