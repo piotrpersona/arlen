@@ -66,6 +66,12 @@ func negative() {
 		fmt.Println("bad")
 	}
 	_ = a3[0:1] // want `slen: check slice a3 length before accessing`
+
+	a4 := []int{1, 2, 3}
+	a4len := len(a4)
+	for i := 0; i < a4len; i++ {
+		_ = a4[i] // want `slen: check slice a4 length before accessing`
+	}
 }
 
 func main() {
