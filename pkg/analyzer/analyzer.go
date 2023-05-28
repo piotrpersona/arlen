@@ -13,12 +13,14 @@ import (
 
 const (
 	lenFunctionName = "len"
-	slenCmd         = "slen"
+
+	SlenCmd         = "slen"
+	SlenDescription = "verifies if slice len was checked before accessing the array"
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: slenCmd,
-	Doc:  "verifies if slice len was checked before accessing the array",
+	Name: SlenCmd,
+	Doc:  SlenDescription,
 	Run:  run,
 }
 
@@ -109,7 +111,7 @@ func (a *SlenAnalyzer) verifyArrayCheck(expr *ast.IndexExpr) {
 }
 
 func (a *SlenAnalyzer) report(pos token.Pos, format string, args ...any) {
-	a.pass.Reportf(pos, "%s: %s", slenCmd, fmt.Sprintf(format, args...))
+	a.pass.Reportf(pos, "%s: %s", SlenCmd, fmt.Sprintf(format, args...))
 }
 
 func (a *SlenAnalyzer) registerArrayCheck(stmt *ast.IfStmt) {
