@@ -2,53 +2,66 @@
 
 Linter which reports if slice element was accessed without checking if slice length.
 
-## Example
+## Examples
+
+### Accessing index of slice
+
+Bad
+```go
+a := []int{1,2,3}
+_ = a[0] // want `slen: check slice a length before accessing`
+```
+
+Good
+```go
+a := []int{1,2,3}
+if len(a) == 0 {
+	// handle
+}
+_ = a[0]
+```
+
+### Accessing slice
+
+Bad
+```go
+a := []int{1,2,3}
+_ = a[0:]
+```
+
+### Check if different function
+
+> TODO: My be a feature
 
 ```go
-package main
-
-import "fmt"
-
-// respect variable position in file except name.
-func do() {
-	a := []int{}
-	if len(a) == 0 {
-		return
-	}
-	_ = a[0]
-}
-
-func main() {
-	do()
-
-	a := []int{}
-	_ = a[0] // want `slen: check slice a length before accessing`
-
-	a1 := []int{}
-	if 0 == len(a1) {
-		_ = a1[0]
-	}
-
-	a2 := []int{1}
-	if len(a2) > 0 {
-		_ = a2[0]
-	}
-
-	a3 := []int{1}
-	if len(a3) < 1 {
-		fmt.Println("bad")
-	}
-	_ = a3[0]
-
-	a4 := []int{1}
-	if check(a) {
-		fmt.Println("bad")
-	}
-	_ = a4[0] // want `slen: check slice a4 length before accessing`
-}
-
 func check(a []int) bool {
 	return len(a) == 0
 }
+
+func main() {
+	a := []int{1,2,3}
+	if check(a) {
+		// handle
+	}
+	_ = a // want `slen: check slice a length before accessing`
+}
 ```
+
+### Positives
+
+```go
+_ = len(a) == 0
+_ = 0 == len(a) // Yoda
+_ = len(a) > 0
+for i := range a {
+	_ = a[i]
+}
+for i := 0; i < len(a); i++ {
+	_ = a[i]
+}
+```
+
+## TODO
+
+* [] Check in different function
 
